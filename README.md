@@ -2,162 +2,152 @@
 
 ## Learning Goals
 
-- Understand strong typing
-- Type cast in Java
+- Explain what casting is in Java and how it works
+- Talk about autoboxing and unboxing
 
-## Introduction
+## What is Casting?
 
-Inheritance and strong-typing are two fundamental aspects of OOP in Java.
-Strong-typing means that the Java compiler will not let you assign an un-related
-type to a variable. For example, the following code will not compile:
+**Type casting** is a process that converts one data type into another data
+type. For example, we could convert an `int` into a `double`, but we may
+experience issues if we were to convert a `double` into an `int`. Let's review
+the different types of data types along with primitive versus reference
+variables for a minute.
 
-```java
-String mySring = 2;
-```
+### Review of Variables
 
-Because the `String` class and the `int` primitive type or even the `Integer`
-wrapper class do not inherit from each other.
+If we remember back from our Variable lesson, there were 7 different primitive
+data types that we discussed:
 
-## Type Casting in Java
+- `boolean`
+- `byte`
+- `char`
+- `int`
+- `long`
+- `float`
+- `double`
 
-Consider the following class hierarchy, which shows Java's "Object" class at the
-root of all classes, and a few of the classes we have encountered in this
-course.
+Each of the primitive data types were of varying different sizes and held
+different types of data: true/false values, single characters, whole numbers,
+and fractional numbers.
 
-_Note: Java's "Object" class is poorly named, because an "object" is usually an
-instance of a class. But the class that all classes ultimately and implicitly
-extend from is called "Object". In this course, as in most technical content, we
-use the term "object" to refer to the instance of a class. We will make sure the
-use the term "Java's Object class" when we are referring to the root class in
-Java._
+Reference variables are different in that they refer to an object, like
+instances of our `Bicycle` class or the `Student` class. A `String` data type is
+also considered a reference variable.
 
-![Class Hierarchy](https://curriculum-content.s3.amazonaws.com/java-mod-2/type-casting/class-hierarchy.png)
+## How Casting Works
 
-In this diagram, the following hierarchy is represented:
-
-1. Classes that do not extend any other class explicitly, therefore extends
-   Java's Object class implicitly:
-   1. String extends Object
-   2. Number extends Object
-   3. Animal extends Object
-2. The following classes are "peer", i.e. they are subclasses of the same class,
-   aka they extend the same class, in this case the Number class:
-   1. Integer extends Number
-   2. Double extends Number
-   3. BigDecimal extends Number
-3. The following custom classes that we created earlier in this module are also
-   peers:
-   1. Cat extends Animal
-   2. Parrot extends Animal
-
-Java supports two types of object conversion:
-
-1. Downcasting
-2. Upcasting
-
-To understand how each work, let's consider a different way to phrase the
-inheritance relationship between two classes. In our example, let's consider
-that `Cat extends Animal`. Another way to say this is that "every cat is an
-animal". The "is a" relationship is another way to say "every cat has all the
-properties and actions of an animal".
-
-When I declare a variable of type `Animal`:
+To see how casting works, let us look back at the Math class' `sqrt()` method:
 
 ```java
-Animal myAnimal;
+double squareRoot = Math.sqrt(36);
 ```
 
-I can assign it an `Animal` value:
+The `sqrt()` method takes in a `double` data type, but here, we are providing it
+an `int` data type with the value of 36. Since a `double` data type is actually
+required, Java will automatically convert the `int` value, 36, to the `double`
+value of 36.0 _before_ passing the parameter to the `sqrt()` method. The method
+will then eventually return a double value of 6.0 and store it within the
+`squareRoot` variable. This type of casting is referred to as **widening** or
+**upcasting**.
+
+We might be thinking why? And how can Java do this automatically? Remember how
+our different primitive data types have sizes? Well an `int` is only 4 bytes
+whereas a `double` is 8 bytes. Since the `int` is smaller, we can easily cast it
+as a `double`. It's like taking the contents from a smaller box and placing them
+in a larger box - we know all the contents will definitely fit because they
+originally fit in a smaller box; hence the names widening and upcasting.
+
+Here is a list of valid promotions that we can upcast data types to:
+
+![type cast promotions](https://curriculum-content.s3.amazonaws.com/java-mod-1/type-casting/Type-Casting-Promotions.png)
+
+[Reference: Java How To Program (Early Objects), Tenth Edition](https://learning.oreilly.com/library/view/java-how-to/9780133813036/ch06lev1sec7.html#ch06lev1sec7)
+
+This list shows us all the ways we can upcast certain data types. As we saw, an
+`int` can be upcast to a `double`, but we can also upcast it to a `long` or a
+`float`. Also notice that the `boolean` data type is excluded from this list as
+it is not considered to be a number in Java.
+
+Now what if we want to go the other way? What if, for some reason, we decide to
+go from a `double` to an `int`? We need to be careful when doing so since that
+kind of casting truncates the decimal part of the `double` value. The same
+could be said if we decided to go from a `long` to an `int`, we may truncate
+part of the value when doing so. But it can be done!
 
 ```java
-myAnimal = new Animal();
+int squareRoot = (int) Math.sqrt(36);
 ```
 
-Or I can assign it a `Cat` or `Parrot` value because since cats and parrots are
-both animals, I can be confident that anything that an `Animal` object would
-need will be part of the definition of a `Cat` or `Parrot` object:
+Since we know that `Math.sqrt(36)` will return a `double` with the value 6.0,
+we can cast the 6.0 to an `int` data type by placing `(int)` in front of the
+value we want to cast. This will force the compiler to jam the value of a
+`double` into an `int`. This means the value of 6.0 will then become a 6 and be
+assigned to the `int squareRoot`. This type of casting is referred to as
+**narrowing** or **downcasting**.
+
+As stated before, we need to be careful when downcasting because we could be
+truncating the size so much that we lose information. Let's compare this to our
+box example. If we take the contents out of a larger box and place them in a
+smaller box, we do not know for sure if all the contents will fit. If the
+contents do not all fit  in the smaller box, we may not be able to put all the
+items into the smaller box - leaving some items completely out of a box.
+
+## Autoboxing and Unboxing
+
+Let's go back to the difference between primitive types and reference types
+again. Reference variables refer to an object in Java. But wouldn't it be nice
+if we could treat our primitive variables the same way? As an object instead?
+In Java, there exist a couple of wrapper classes to do just that! A **wrapper**
+**class** is a class whose object contains primitive data types so that we can
+use them as objects. Consider the following table of primitive data types and
+the equivalent wrapper class:
+
+| Primitive Data Type | Wrapper Class |
+|---------------------|---------------|
+| `boolean`           | `Boolean`     |
+| `byte`              | `Byte`        |
+| `char`              | `Character`   |
+| `int`               | `Integer`     |
+| `long`              | `Long`        |
+| `float`             | `Float`       |
+| `double`            | `Double`      |
+
+We can initialize a wrapper object in a similar way that we would initialize a
+primitive data type:
 
 ```java
-myAnimal = new Cat();
+Integer x = 8;
+Double y = 18.50;
 ```
 
-Note, however, that in this case the `myAnimal` variable is still considered by
-your program to be of type `Animal`, so the variables and methods that are part
-of the `Cat` type are not accessible using the `myAnimal` variable.
-
-This is called "upcasting" because we are assigned an object an instance of a
-class that is further "up" in the hierarchy, as depicted in the class diagram
-above. And as you can see, it is done implicitly without needing any special
-notation. It is a "safe" operation, i.e. it can never fail, because the `Animal`
-holds less properties and has less methods than the `Cat` class, since the `Cat`
-class extends the `Animal` class. So taking an `Animal` object and giving it all
-the values a `Cat` object has guarantees that the `Animal` object will have all
-the values it's expecting.
-
-The reverse of this operation is called "downcasting", i.e. taking an instance
-of a class higher in the hierarchy and assigning it the value of an instance of
-a class lower in the hierarchy. That operation is not "safe" because it might
-fail at runtime if the two types that you are trying to cast to one another are
-not compatible.
-
-To understand this better, we need to consider the previous example for
-downcasting more closely. I will add a line of code to the previous example to
-print the name of the class that my variable `myAnimal` is an instance of:
+Now what if we have a primitive data type, but we want to use it like an object?
+Can we cast it to its corresponding wrapper class? The answer is yes - but this
+is a special kind of cast. **Autoboxing** is the automatic conversion between a
+primitive and its wrapper class. Let's look at an example!
 
 ```java
-Animal myAnimal = new Cat();
-System.out.println(myAnimal.getClass().toString());
+int a = 8;
+double b = 18.50;
+
+// Autoboxing
+Integer x = a;
+Double y = new Double(b);
 ```
 
-This produces the following output:
+Notice how we can either convert the primitive to its wrapper object by directly
+assigning the primitive to the wrapper object, or using the syntax
+`Object object = new Object()` and feeding the wrapper class the primitive value
+as a parameter.
 
-```
-class Cat
-```
-
-As you can see, my `myAnimal` object is an object of type `Cat`, not of type
-`Animal`. That's because there is a difference between the "compile-time" type
-and the "runtime" type. At compile time, meaning when the code was written, the
-type of the `myAnimal` variable was defined as `Animal`. However, when the
-program runs, and an actual value is assigned to that variable, it's assigned a
-value of type `Cat`, which is upcasting and is allowed, as we saw above.
-Therefore, the runtime type of `myAnimal` is `Cat`.
-
-This is a simple scenario where we can plainly see the runtime type, but there
-are scenarios where the runtime type can vary based on things that happen in
-your program or in other parts of the system you're putting together.
-
-Since it is impossible for the compiler to anticipate all the permutations of
-the runtime situations that your program will see, it's not possible for the
-compiler to tell ahead of time whether a specific downcast will be possible or
-not. Java deals with this uncertainty by requiring you, the programmer, to
-explicitly downcast, which achieves two things:
-
-1. It forces you to consider the logic in your own program and system to ensure
-   that downcasting should work in your specific scenario
-2. It allows you to put your explicit cast in a `try catch` block and catch the
-   `ClassCastException` that the Java runtime will throw at runtime if your
-   explicit cast is not actually possible
-
-Here is the syntax for explicit casting:
+**Unboxing** is the opposite of autoboxing in that it converts an object of its
+wrapper class to its matching primitive. This is also an automatic conversion
+just like autoboxing!
 
 ```java
-Animal myAnimal = new Cat();
-Cat myCat = (Cat)myAnimal;
-```
+Integer x = 8;
+Double y = 18.50;
 
-Note that the example above will compile and also run because `myAnimal`'s
-runtime type is `Cat`, which is obviously compatible with the `myCat` variable.
-
-Modifying the code as follows, however, will compile, but it will generate a
-`ClassCastException` at runtime because you cannot cast from a lower class in
-the hierarchy (`Animal`) to a higher class in the hierarchy (`Cat`). That is,
-you can force the code to compile by adding the explicit downcast, but Java is
-unable to do what you're asking it to do at runtime in this case because it
-turns out that your `myAnimal` object does not have enough information in it to
-give your `myCat` object everything it needs.
-
-```java
-Animal myAnimal = new Animal();
-Cat myCat = (Cat)myAnimal;
+// Unboxing
+int a = x;
+double b = y;
 ```
