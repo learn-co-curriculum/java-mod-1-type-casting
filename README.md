@@ -113,7 +113,6 @@ of a standard die. Then we do a little math to ensure that a value between 1 and
 6 is returned and cast it as an `int` to force the expression to return an
 integer instead of a `double` since we are only concerned about the value before
 the decimal point.
-12345678910111213141516171819202122232425262728293031323334353637383940404143454
 
 ## Autoboxing and Unboxing
 
