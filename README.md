@@ -92,6 +92,29 @@ smaller box, we do not know for sure if all the contents will fit. If the
 contents do not all fit  in the smaller box, we may not be able to put all the
 items into the smaller box - leaving some items completely out of a box.
 
+A good example of when we might want to downcast is when we want to use the
+`Math.random()` method to generate a random integer instead of a random
+fractional number.
+
+Consider rolling a die: a die has 6 sides with the numbers 1-6 on each face.
+
+```java
+int min = 1;
+int max = 6;
+int range = (max - min) + 1;
+
+// Generate random numbers between 1 and 6
+int randomRoll = (int)(Math.random() * range) + min;
+```
+
+To get a random integer value using the `random()` method, we need to define a
+range first. In this case, we hardcoded the numbers 1 and 6 to define the range
+of a standard die. Then we do a little math to ensure that a value between 1 and
+6 is returned and cast it as an `int` to force the expression to return an
+integer instead of a `double` since we are only concerned about the value before
+the decimal point.
+12345678910111213141516171819202122232425262728293031323334353637383940404143454
+
 ## Autoboxing and Unboxing
 
 Let's go back to the difference between primitive types and reference types
